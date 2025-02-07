@@ -19,8 +19,18 @@
                 x-transition:enter="duration-300 ease-out"
                 x-transition:enter-start="opacity-0 -translate-y-5 scale-90"
                 x-transition:enter-end="opacity-100 translate-y-0 scale-100">
-                    <ul id="chats-list" class="h-20 flex justify-center items-center">
-                        <img class="w-10 h-10" src="/static/images/loading_rolling.gif">
+                    <ul class="hoverlist [&>li>a]:justify-end">
+                        <li><a href='{% url "home"%}'>Public Chat </a></li>
+                        {% for chatroom in user.chat_groups.all%}
+                           {% if chatroom.is_private %}
+                               {% for member in chatroom.members.all %}
+                                  {% if member != user%}
+                                      <li><a href='{% url "chatroom" chatroom.group_name%}'>{{member.profile.name}}</a></li>
+                                  {% endif%}
+                                {% endfor %}
+                            {% endif%}
+                        {% endfor %}
+                         
                     </div>
                 </div>
             </li>
