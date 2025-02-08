@@ -119,4 +119,12 @@ def chatroom_edit_view(request,chatroom_name):
     return render(request,'a_rtchat/chatroom_edit.html',context)
 
 def chatroom_delete_view(request,chatroom_name):
-    return render(request,'a_rtchat/chatroom_delete.html')
+    chat_group = get_object_or_404(ChatGroup,group_name=chatroom_name)
+    if request.user != chat_group.admin:
+        raise Http404()
+    
+    if request.method == "POST":
+        chat_group.delete()
+        messages.success(request,"Chatroom deleted successfully")
+        return redirect("home")
+    return render(request,'a_rtchat/chatroom_delete.html',{'chat_group':chat_group})
