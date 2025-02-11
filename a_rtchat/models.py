@@ -30,6 +30,13 @@ class GroupMessage(models.Model):
             return os.path.basename(self.file.name)
         else:
             return None
+        
+    @property
+    def is_image(self):
+        if self.filename.lower().endswith(('.jpg','.png','.jpeg','.gif','.svg','.webp')):
+            return True
+        else:
+            return False
 
     def __str__(self):
         if self.body:
